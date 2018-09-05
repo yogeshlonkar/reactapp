@@ -1,13 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Base64 } from 'js-base64';
 
 class BookList extends React.Component {
   getBooks = () => {
     const { history } = this.props;
     let { books } = this.props;
     books = books.map((book, index) => (
-      <tr key={book.name} style={{ cursor: 'pointer' }} onClick={() => history.push(`/books/${Base64.encode(book.name)}`)}>
+      <tr key={book.name} style={{ cursor: 'pointer' }} onClick={() => history.push(`/books/${book._id}`)}>
         <th scope="row">{index + 1}</th>
         <td>{book.name}</td>
         <td>{book.pages}</td>

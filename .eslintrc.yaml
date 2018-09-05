@@ -20,6 +20,7 @@ rules:
       every:
       - id
   jsx-a11y/label-has-associated-control: 0
+  no-underscore-dangle: 'off'
 settings:
   import/resolver:
     webpack:

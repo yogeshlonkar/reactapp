@@ -51,8 +51,8 @@ class ReactApp extends React.Component {
             <div className="main-section d-flex justify-content-center align-items-start">
               <Switch>
                 <Route exact path="/" render={props => <Home {...props} routeHeader={this.setHeader} />} />
-                <Route path="/users/:email?" render={props => <UsersPage {...props} routeHeader={this.setHeader} />} />
-                <Route path="/books/:book?" render={props => <BooksPage {...props} routeHeader={this.setHeader} />} />
+                <Route path="/users/:userId?" render={props => <UsersPage {...props} routeHeader={this.setHeader} />} />
+                <Route path="/books/:bookId?" render={props => <BooksPage {...props} routeHeader={this.setHeader} />} />
                 <Route render={props => <NotFound {...props} routeHeader={this.setHeader} />} />
               </Switch>
             </div>

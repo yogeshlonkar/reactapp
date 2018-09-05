@@ -2,9 +2,9 @@ import React from 'react';
 import _ from 'lodash';
 import omitEmpty from 'omit-empty';
 import { withRouter } from 'react-router-dom';
-import { Base64 } from 'js-base64';
 import { Helmet } from 'react-helmet';
 import './users.scss';
+import Alert from 'Components/alert';
 import UserList from './userlist';
 
 const emptyUser = {
@@ -20,17 +20,6 @@ const emptyUser = {
   }
 };
 
-const Alert = ({ message, type, dismiss }) => (
-  <div>
-    <div className={`alert alert-${type} alert-dismissible fade show`} role="alert">
-      <button type="button" className="close" onClick={dismiss} data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      {message}
-    </div>
-  </div>
-);
-
 class UsersPage extends React.Component {
   constructor(props) {
     super(props);
@@ -45,16 +34,16 @@ class UsersPage extends React.Component {
     const { match, routeHeader } = this.props;
     this.fetchUsers();
     routeHeader(<h2 className="mb-0">Manage users</h2>);
-    if (match.params.email) {
-      this.fetchUser(Base64.decode(match.params.email));
+    if (match.params.userId) {
+      this.fetchUser(match.params.userId);
     }
   }
 
   componentDidUpdate = (prevProps) => {
     const { match } = this.props;
-    const oldEmail = _.get(prevProps, 'match.params.email', undefined);
-    if (match.params.email && oldEmail !== match.params.email) {
-      this.fetchUser(Base64.decode(match.params.email));
+    const oldEmail = _.get(prevProps, 'match.params.userId', undefined);
+    if (match.params.userId && oldEmail !== match.params.userId) {
+      this.fetchUser(match.params.userId);
     }
   }
 
@@ -73,7 +62,7 @@ class UsersPage extends React.Component {
     let { user } = this.state;
     user = omitEmpty(user);
     (async () => {
-      const rawResponse = await fetch(`/api/users/${user.email}`, {
+      const rawResponse = await fetch(`/api/users/${user._id || ''}`, {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
@@ -91,7 +80,10 @@ class UsersPage extends React.Component {
         const message = (
           <div>
             <strong>Can&#39;t save user!</strong>
-            {res.message}
+            <div style={{ fontSize: '13px' }}>
+              {res.message}
+              .
+            </div>
           </div>
         );
         this.setState({ alert: { message, type: 'danger' } });

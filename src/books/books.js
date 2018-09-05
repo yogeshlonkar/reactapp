@@ -2,25 +2,14 @@ import React from 'react';
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { Base64 } from 'js-base64';
 
+import Alert from 'Components/alert';
 import BookList from './booklist';
 
 const emptyBook = {
   name: '',
   pages: 1
 };
-
-const Alert = ({ message, type, dismiss }) => (
-  <div>
-    <div className={`alert alert-${type} alert-dismissible fade show`} role="alert">
-      <button type="button" className="close" onClick={dismiss} data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      {message}
-    </div>
-  </div>
-);
 
 class BooksPage extends React.Component {
   constructor(props) {
@@ -36,16 +25,16 @@ class BooksPage extends React.Component {
     const { match, routeHeader } = this.props;
     routeHeader(<h2 className="mb-0">Manage books</h2>);
     this.fetchBooks();
-    if (match.params.book) {
-      this.fetchBook(Base64.decode(match.params.book));
+    if (match.params.bookId) {
+      this.fetchBook(match.params.bookId);
     }
   }
 
   componentDidUpdate = (prevProps) => {
     const { match } = this.props;
-    const oldEmail = _.get(prevProps, 'match.params.book', undefined);
-    if (match.params.book && oldEmail !== match.params.book) {
-      this.fetchBook(Base64.decode(match.params.book));
+    const oldEmail = _.get(prevProps, 'match.params.bookId', undefined);
+    if (match.params.bookId && oldEmail !== match.params.bookId) {
+      this.fetchBook(match.params.bookId);
     }
   }
 
@@ -108,16 +97,28 @@ class BooksPage extends React.Component {
   postBook = () => {
     const { book } = this.state;
     (async () => {
-      const rawResponse = await fetch(`/api/books/${book.name}`, {
+      const rawResponse = await fetch(`/api/books/${book._id || ''}`, {
         method: 'POST',
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify(book)
       });
-      if (rawResponse.status >= 400) {
+      if (rawResponse.status >= 500) {
         const message = (
           <div>
             <strong>Something went wrong! </strong>
             while adding/updating book.
+          </div>
+        );
+        this.setState({ alert: { message, type: 'danger' } });
+      } else if (rawResponse.status >= 400) {
+        const res = await rawResponse.json();
+        const message = (
+          <div>
+            <strong>Can&#39;t add/update book! </strong>
+            <div style={{ fontSize: '13px' }}>
+              {res.message}
+              .
+            </div>
           </div>
         );
         this.setState({ alert: { message, type: 'danger' } });
