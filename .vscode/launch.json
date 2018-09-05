@@ -7,8 +7,16 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}/test.js"
+            "name": "dev",
+            "program": "${workspaceFolder}/node_modules/.bin/webpack-dev-server",
+            "args": [
+                "--mode",
+                "development",
+                "--devtool",
+                "inline-source-map",
+                "--hot"
+            ],
+            "autoAttachChildProcesses": true
         }
     ]
 }

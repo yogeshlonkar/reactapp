@@ -55,20 +55,6 @@ const config = {
     historyApiFallback: true
   },
   plugins: [
-    new CleanWebpackPlugin([outputDirectory]),
-    new FaviconsWebpackPlugin({
-      logo: './public/yogi.jpg',
-      icons: {
-        android: false,
-        appleIcon: false,
-        appleStartup: false,
-        coast: false,
-        favicons: true,
-        firefox: false,
-        windows: false,
-        yandex: false
-      }
-    }),
     new HtmlWebpackPlugin({
       template: './public/index.html'
     })
@@ -76,6 +62,20 @@ const config = {
 };
 
 if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(new FaviconsWebpackPlugin({
+    logo: './public/yogi.jpg',
+    icons: {
+      android: false,
+      appleIcon: false,
+      appleStartup: false,
+      coast: false,
+      favicons: true,
+      firefox: false,
+      windows: false,
+      yandex: false
+    }
+  }));
+  config.plugins.push(new CleanWebpackPlugin([outputDirectory]));
   config.plugins.push(new UglifyJSPlugin());
   config.plugins.push(new CompressionPlugin());
   config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false }));

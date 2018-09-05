@@ -78,11 +78,20 @@ class UsersPage extends React.Component {
         headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
       });
-      if (rawResponse.status >= 400) {
+      if (rawResponse.status >= 500) {
         const message = (
           <div>
             <strong>Something went wrong! </strong>
             while adding/updating user.
+          </div>
+        );
+        this.setState({ alert: { message, type: 'danger' } });
+      } else if (rawResponse.status >= 400) {
+        const res = await rawResponse.json();
+        const message = (
+          <div>
+            <strong>Can&#39;t save user!</strong>
+            {res.message}
           </div>
         );
         this.setState({ alert: { message, type: 'danger' } });
