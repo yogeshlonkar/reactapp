@@ -15,7 +15,12 @@ npm run build
 
 ## Docker repository
 [`ylonkar/reactapp`](https://hub.docker.com/r/ylonkar/reactapp/)
-- `latest` [Dockerfile](https://github.com/yogeshlonkar/reactapp/blob/master/Dockerfile)
+
+[Dockerfile](https://github.com/yogeshlonkar/reactapp/blob/master/Dockerfile)
+
+### Tags
+- `latest` 
+- `2.0.0`
 
 ## Run
 Using docker
